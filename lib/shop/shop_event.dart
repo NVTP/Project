@@ -26,7 +26,7 @@ class _ShopEventState extends State<ShopEvent> {
     super.initState();
   }
 
-  showLog(String productName, String image,String currentAmount) {
+  showLog(String productName, String image,String currentAmount,String userId) {
     if (_amountOffer.text.isEmpty || _priceOffer.text.isEmpty) {
       return showDialog(
           context: context,
@@ -80,7 +80,7 @@ class _ShopEventState extends State<ShopEvent> {
                   onPressed: () {
                     print('save ok');
                     print(widget.evID);
-                    _onSubmit(productName,image,currentAmount);
+                    _onSubmit(productName,image,currentAmount,userId);
                     Navigator.pop(context);
                   },
                 ),
@@ -99,7 +99,7 @@ class _ShopEventState extends State<ShopEvent> {
     }
   }
 
-  _onSubmit(String productName, String image,String currentAmount) async {
+  _onSubmit(String productName, String image,String currentAmount,String userId) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -116,6 +116,7 @@ class _ShopEventState extends State<ShopEvent> {
       'shopAmount': _amountOffer.text,
       'shopEmail': user.email,
       'image':image,
+      'userId':userId,
       'shopPic': user.photoUrl,
       'productName': productName,
       'currentAmount':currentAmount,
@@ -132,6 +133,7 @@ class _ShopEventState extends State<ShopEvent> {
       'eventId':eventID,
       'productName':productName,
       'image':image,
+      'userId':userId,
       'joinAt':Timestamp.now(),
       'currentAmount':currentAmount,
     }).catchError((e) {
@@ -151,6 +153,7 @@ class _ShopEventState extends State<ShopEvent> {
           var productName = snapshot.data['productName'];
           var image = snapshot.data['image'];
           var currentAmount = snapshot.data['currentAmount'];
+          var userId = snapshot.data['userCreateId'];
           if (!snapshot.hasData) return Text('loading');
           return SingleChildScrollView(
             child: Center(
@@ -317,7 +320,7 @@ class _ShopEventState extends State<ShopEvent> {
                           ),
                           RaisedButton(
                             onPressed: () {
-                              showLog(productName,image,currentAmount);
+                              showLog(productName,image,currentAmount,userId);
                               print('when join');
                             },
                             elevation: 1.1,
