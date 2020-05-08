@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalproject/controllers/event_controller.dart';
 import 'package:finalproject/customer/controlPageCustomer/main_event.dart';
 import 'package:finalproject/services/notifier/event_notifier.dart';
@@ -60,7 +61,70 @@ class _HomeCustomerState extends State<HomeCustomer> {
         body: RefreshIndicator(
           onRefresh: _refreshList,
           child: StreamBuilder(
-
+            stream: Firestore.instance.collection('events').orderBy('createAt',descending: true).snapshots(),
+            builder: (context,AsyncSnapshot<QuerySnapshot> snapshot){
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator(),);
+              }else{
+                List<DocumentSnapshot> reversedDocuments = snapshot.data.documents.reversed.toList();
+                return ListView.separated(
+                  separatorBuilder: (context,index){
+                    return SizedBox(
+                      height: 22,
+                      child: Divider(
+                        height: 1,
+                        color: Colors.red,
+                      ),
+                    );
+                  },
+                  itemCount: reversedDocuments.length,
+                  itemBuilder: (context,index){
+                    return Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 8,
+                        ),
+                        InkWell(
+                          onTap: (){
+                            print(reversedDocuments[index].data['eventId']);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>MainEvent(
+                                  reversedDocuments[index].data['eventId'].toString(),
+                                ))
+                            );
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey[300],width: 1),
+                                    borderRadius: BorderRadius.circular(22),
+                                    color: Colors.black12
+//                                      image: DecorationImage(
+//                                          fit: BoxFit.cover,
+//                                          image: NetworkImage(reversedDocuments[index].data['image'].toString())
+//                                      ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Text(reversedDocuments[index].data['productName'].toString())
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            },
           ),
         ),
 //      body: RefreshIndicator(

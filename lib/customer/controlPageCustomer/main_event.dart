@@ -3,6 +3,8 @@ import 'package:finalproject/customer/event_customer.dart';
 import 'package:flutter/material.dart';
 
 class MainEvent extends StatefulWidget {
+  String evID;
+  MainEvent(this.evID);
   @override
   _MainEventState createState() => _MainEventState();
 }
@@ -37,8 +39,8 @@ class _MainEventState extends State<MainEvent> with SingleTickerProviderStateMix
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
-          EventCustomer(),
-          EventCusShop(),
+          EventCustomer(widget.evID),
+          EventCusShop(widget.evID),
         ],
       ),
     );

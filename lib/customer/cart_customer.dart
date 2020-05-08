@@ -14,7 +14,9 @@ class CartCustomer extends StatefulWidget {
 class _CartCustomerState extends State<CartCustomer> {
   //todo query user create event by eventID
   //todo in userCreate have eventID
-  var avatar = 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg';
+  var avatar =
+      'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg';
+  var uId;
 
   another(EventNotifier eventNotifier) async {
     var uidAA;
@@ -29,7 +31,9 @@ class _CartCustomerState extends State<CartCustomer> {
     List<Events> _eventList = [];
     snapshot.documents.forEach((docs) {
       Events events = Events.fromMap(docs.data);
-      _eventList.add(events,);
+      _eventList.add(
+        events,
+      );
     });
     eventNotifier.eventList = _eventList;
   }
@@ -38,9 +42,17 @@ class _CartCustomerState extends State<CartCustomer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    EventNotifier eventNotifier = Provider.of<EventNotifier>(
-        context, listen: false);
+    EventNotifier eventNotifier =
+        Provider.of<EventNotifier>(context, listen: false);
     another(eventNotifier);
+    FirebaseAuth.instance
+        .currentUser()
+        .then((value) => setState(() {
+              uId = value.uid;
+            }))
+        .catchError((e) {
+      print('112 $e');
+    });
   }
 
   @override
@@ -49,82 +61,176 @@ class _CartCustomerState extends State<CartCustomer> {
     Future<void> _refresh() async {
       another(eventNotifier);
     }
+
     if (eventNotifier.eventList.isEmpty) {
       return Container(
         child: Center(
-          child: Text('Sorry you don\'t have',
-            style: TextStyle(color: Colors.red, fontSize: 40),),
+          child: Text(
+            'Sorry you don\'t have',
+            style: TextStyle(color: Colors.red, fontSize: 40),
+          ),
         ),
       );
     }
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refresh,
-        child: ListView.separated(
-          separatorBuilder: (context, index) {
-            return Divider(
-              height: 10,
-              color: Colors.white,
-            );
-          },
-          itemCount: eventNotifier.eventList.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                eventNotifier.currentEvent = eventNotifier.eventList[index];
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainEvent()));
-              },
-              child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey[200]
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      height: 250,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
+        child: StreamBuilder(
+          stream: Firestore.instance
+              .collection('users')
+              .document(uId)
+              .collection('userCreate')
+              .orderBy('createAt', descending: false)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              List<DocumentSnapshot> reversedDocuments =
+                  snapshot.data.documents.reversed.toList();
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    height: 12,
+                    child: Divider(
+                      height: 1,
+                      color: Colors.red,
+                    ),
+                  );
+                },
+                itemCount: reversedDocuments.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: Colors.grey[400],
-                            width: 1
-                        ),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            alignment: Alignment.center,
-                            image: NetworkImage(
-                                eventNotifier.eventList[index].image ?? avatar)
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey[200]),
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context)=>MainEvent(
+                                reversedDocuments[index].data['eventId']
+                              ))
+                          );
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 22),
+                              height: 250,
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(child: Text('Loading...'),),
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.grey[300], width: 2),
+                                borderRadius: BorderRadius.circular(22),
+//                            image: DecorationImage(
+//                              fit: BoxFit.cover,
+//                              alignment: Alignment.center,
+//                              image: NetworkImage(reversedDocuments[index].data['image'])
+//                            ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            Text('Product Name : ' + reversedDocuments[index].data['productName'],
+                              style: TextStyle(
+                                fontSize: 22
+                              ),),
+                            Text('Amount : ' + reversedDocuments[index].data['userAmount'],
+                              style: TextStyle(
+                                fontSize: 18
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text('Product Name : ' +
-                        eventNotifier.eventList[index].productName),
-                    Text('Amount : ' +
-                        eventNotifier.eventList[index].userAmount),
-                    SizedBox(
-                      height: 8,
-                    ),
-                  ],
-                ),
-              ),
-            );
+                  );
+                },
+              );
+            }
           },
         ),
       ),
+
+//      body: RefreshIndicator(
+//        onRefresh: _refresh,
+//        child: ListView.separated(
+//          separatorBuilder: (context, index) {
+//            return Divider(
+//              height: 10,
+//              color: Colors.white,
+//            );
+//          },
+//          itemCount: eventNotifier.eventList.length,
+//          itemBuilder: (context, index) {
+//            return InkWell(
+//              onTap: () {
+//                eventNotifier.currentEvent = eventNotifier.eventList[index];
+////                Navigator.push(context,
+////                    MaterialPageRoute(builder: (context) => MainEvent()));
+//              },
+//              child: Container(
+//                width: MediaQuery
+//                    .of(context)
+//                    .size
+//                    .width,
+//                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+//                decoration: BoxDecoration(
+//                    borderRadius: BorderRadius.circular(12),
+//                    color: Colors.grey[200]
+//                ),
+//                child: Column(
+//                  children: <Widget>[
+//                    Container(
+//                      padding: EdgeInsets.symmetric(horizontal: 20),
+//                      height: 250,
+//                      width: MediaQuery
+//                          .of(context)
+//                          .size
+//                          .width,
+//                      decoration: BoxDecoration(
+//                        borderRadius: BorderRadius.circular(12),
+//                        border: Border.all(
+//                            color: Colors.grey[400],
+//                            width: 1
+//                        ),
+//                        image: DecorationImage(
+//                            fit: BoxFit.cover,
+//                            alignment: Alignment.center,
+//                            image: NetworkImage(
+//                                eventNotifier.eventList[index].image ?? avatar)
+//                        ),
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      height: 8,
+//                    ),
+//                    Text('Product Name : ' +
+//                        eventNotifier.eventList[index].productName),
+//                    Text('Amount : ' +
+//                        eventNotifier.eventList[index].userAmount),
+//                    SizedBox(
+//                      height: 8,
+//                    ),
+//                  ],
+//                ),
+//              ),
+//            );
+//          },
+//        ),
+//      ),
+
 //      body: ListView.separated(
 //        separatorBuilder: (BuildContext context, int index) {
 //          return SizedBox(

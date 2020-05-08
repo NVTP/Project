@@ -6,10 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EventCustomer extends StatefulWidget {
+  String evID;
+
+  EventCustomer(this.evID);
+
   @override
   _EventCustomerState createState() => _EventCustomerState();
 }
@@ -29,7 +34,6 @@ class _EventCustomerState extends State<EventCustomer> {
   UserJoin _userJoin;
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -41,7 +45,7 @@ class _EventCustomerState extends State<EventCustomer> {
     phone = TextEditingController();
     name = TextEditingController();
     EventNotifier eventNotifier =
-    Provider.of<EventNotifier>(context, listen: false);
+        Provider.of<EventNotifier>(context, listen: false);
     getJoin(eventNotifier);
     Future<void> _refreshEvent() async {
       eventNotifier.currentEvent;
@@ -56,7 +60,7 @@ class _EventCustomerState extends State<EventCustomer> {
     valueVariation = true;
   }
 
-  _showImage() {
+  _showImage(var image) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Container(
@@ -66,8 +70,8 @@ class _EventCustomerState extends State<EventCustomer> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
             border: Border.all(width: 1, color: Colors.grey),
-            image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(_imageUrl))),
+            image:
+                DecorationImage(fit: BoxFit.cover, image: NetworkImage(image))),
       ),
     );
   }
@@ -216,7 +220,10 @@ class _EventCustomerState extends State<EventCustomer> {
                       address.clear();
                     });
                   },
-                  child: Text('OK',style: TextStyle(color: Colors.red),),
+                  child: Text(
+                    'OK',
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ],
             );
@@ -358,7 +365,10 @@ class _EventCustomerState extends State<EventCustomer> {
                           name.clear();
                         });
                       },
-                      child: Text('Cancel',style: TextStyle(color: Colors.grey),),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ),
                     FlatButton(
                       onPressed: () {
@@ -367,7 +377,10 @@ class _EventCustomerState extends State<EventCustomer> {
                           _onSubmit();
                         }
                       },
-                      child: Text('OK',style: TextStyle(color: Colors.red),),
+                      child: Text(
+                        'OK',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
                   ],
                 ),
@@ -466,106 +479,166 @@ class _EventCustomerState extends State<EventCustomer> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshEvent,
-        child: SafeArea(
-          child: ListView(
-            children: <Widget>[
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _showImage(),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      'Product : ${eventNotifier.currentEvent.productName}',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      'Category : ${eventNotifier.currentEvent.category}',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      child: Card(
-                        color: Colors.grey[200],
-                        elevation: 1.1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          width: MediaQuery.of(context).size.width,
-                          height: 100.0,
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Center(
-                            child: Text(eventNotifier.currentEvent.eventDetail),
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: Firestore.instance
+              .collection('events')
+              .document(widget.evID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            var productName = snapshot.data['productName'];
+            var image = snapshot.data['image'];
+            var currentAmount = snapshot.data['currentAmount'];
+            if (!snapshot.hasData) return Center(child: Text('loading'));
+            return SingleChildScrollView(
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _showImage(image),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        'Product : $productName',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        'Category : ${snapshot.data['category']}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                        child: Card(
+                          color: Colors.grey[200],
+                          elevation: 1.1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            width: MediaQuery.of(context).size.width,
+                            height: 100.0,
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Center(
+                              child: Text(snapshot.data['eventDetail']),
+                            ),
                           ),
                         ),
                       ),
-                    ), //DETAIL PRODUCT
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text('Quantity : ${eventNotifier.currentEvent.currentAmount}'),
-                        Text('Shop Require : ${eventNotifier.currentEvent.shopAmount ?? '0'}'),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                            'Resposible by Shop : ${eventNotifier.currentEvent.shopEmail ?? '0'}'),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                            'Price per piece : ${eventNotifier.currentEvent.mediumPrice}'),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Center(
+                      //DETAIL PRODUCT
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Text('Quantity : $currentAmount'),
+                          Text(
+                              'Shop Require : ${snapshot.data['shopAmount'] ?? '0'}'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text(
+                              'Resposible by Shop : ${snapshot.data['shopEmail'] ?? '0'}'),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                              'Price per piece : ${snapshot.data['mediumPrice']}'),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                                borderRadius: BorderRadius.circular(22),
+                              ),
                               child: Column(
                                 children: <Widget>[
-                                  Text(
-                                    'Choice',
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 22),
-                                  ),
                                   SizedBox(
-                                    height: 8,
+                                    height: 12,
                                   ),
-                                  Text(
-                                    '** tap for choose',
-                                    style: TextStyle(color: Colors.red),
+                                  Center(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          'Choice',
+                                          style: TextStyle(
+                                              color: Colors.red, fontSize: 22),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                          '** tap for choose',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 42),
+                                    itemCount:
+                                        snapshot.data['variations'].length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            mainAxisSpacing: 4,
+                                            crossAxisSpacing: 4),
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 22, vertical: 22),
+                                        child: InkWell(
+                                          onTap: () => _forUser(snapshot
+                                              .data['variations'][index]
+                                              .toString()),
+                                          splashColor: Colors.red,
+                                          focusColor: Colors.red,
+                                          highlightColor: Colors.red,
+                                          child: Container(
+                                            child: Center(
+                                                child: Text(
+                                              snapshot.data['variations'][index]
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )),
+                                            decoration: BoxDecoration(
+                                                color: Colors.blueGrey[300],
+                                                border: Border.all(
+                                                    color:
+                                                        Colors.deepOrange[300],
+                                                    width: 2),
+                                                shape: BoxShape.circle),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                   SizedBox(
                                     height: 8,
@@ -573,173 +646,138 @@ class _EventCustomerState extends State<EventCustomer> {
                                 ],
                               ),
                             ),
-                            GridView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.symmetric(horizontal: 42),
-                              itemCount:
-                              eventNotifier.currentEvent.variations.length,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 4,
-                                  crossAxisSpacing: 4),
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 22, vertical: 22),
-                                  child: InkWell(
-                                    onTap: () => _forUser(eventNotifier
-                                        .currentEvent.variations[index]
-                                        .toString()),
-                                    splashColor: Colors.red,
-                                    focusColor: Colors.red,
-                                    highlightColor: Colors.red,
-                                    child: Container(
-                                      child: Center(
-                                          child: Text(
-                                            eventNotifier
-                                                .currentEvent.variations[index]
-                                                .toString(),
-                                            style: TextStyle(color: Colors.white),
-                                          )),
-                                      decoration: BoxDecoration(
-                                          color: Colors.blueGrey[300],
-                                          border: Border.all(
-                                              color: Colors.deepOrange[300],
-                                              width: 2),
-                                          shape: BoxShape.circle),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    showForUser(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 6),
-                          child: Text(
-                            'Quantity',
-                            style: TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.grey[200]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            RawMaterialButton(
-                              onPressed: minus,
-                              child: Icon(
-                                Icons.remove,
-                                color: Colors.blueGrey[300],
+                          SizedBox(
+                            height: 22,
+                          ),
+                          showForUser(),
+                          SizedBox(
+                            height: 22,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 6),
+                                child: Text(
+                                  'Quantity',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            Text(
-                              '$_count',
-                              style: TextStyle(
-                                  color: Colors.blueGrey[300], fontSize: 18),
-                            ),
-                            RawMaterialButton(
-                              onPressed: add,
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.blueGrey[300],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text('Date Start : ' + DateFormat('hh:mm:ss dd-MM-yyyy ').format(eventNotifier.currentEvent.createAt.toDate())),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text('Date End : ' + DateFormat('hh:mm:ss dd-MM-yyyy ').format(eventNotifier.currentEvent.endAt.toDate())),
-                      ],
-                    ), //DATE
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
+                            ],
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              child: RaisedButton(
-                                color: Colors.blueGrey[200],
-                                focusColor: Colors.red,
-                                splashColor: Colors.red,
-                                highlightColor: Colors.red,
-                                onPressed: () {
-                                  print('fuckkkkk');
-                                  _showDialog();
-                                },
-                                elevation: 1.1,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Text(
-                                  'JOIN',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[200]),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  RawMaterialButton(
+                                    onPressed: minus,
+                                    child: Icon(
+                                      Icons.remove,
+                                      color: Colors.blueGrey[300],
+                                    ),
+                                  ),
+                                  Text(
+                                    '$_count',
+                                    style: TextStyle(
+                                        color: Colors.blueGrey[300],
+                                        fontSize: 18),
+                                  ),
+                                  RawMaterialButton(
+                                    onPressed: add,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Colors.blueGrey[300],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           SizedBox(
-                            width: 10.0,
+                            height: 22.0,
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: RaisedButton(
-                                color: Colors.blueGrey[200],
-                                onPressed: () {},
-                                elevation: 1.1,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Text(
-                                  'Delete',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text('Date Start : ' +
+                                  DateFormat('hh:mm:ss dd-MM-yyyy ').format(
+                                      snapshot.data['createAt'].toDate())),
+                              SizedBox(
+                                height: 8,
                               ),
-                            ),
+                              Text('Date End : ' +
+                                  DateFormat('hh:mm:ss dd-MM-yyyy ')
+                                      .format(snapshot.data['endAt'].toDate())),
+                            ],
+                          ), //DATE
+                          SizedBox(
+                            height: 12,
                           ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: RaisedButton(
+                                      color: Colors.blueGrey[200],
+                                      focusColor: Colors.red,
+                                      splashColor: Colors.red,
+                                      highlightColor: Colors.red,
+                                      onPressed: () {
+                                        print('fuckkkkk');
+                                        _showDialog();
+                                      },
+                                      elevation: 1.1,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Text(
+                                        'JOIN',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 12.0,
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: RaisedButton(
+                                      color: Colors.blueGrey[200],
+                                      onPressed: () {},
+                                      elevation: 1.1,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Text(
+                                        'Delete',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                ),
 //                        IconButton(
 //                          onPressed: () {},
 //                          icon: Icon(
@@ -747,128 +785,534 @@ class _EventCustomerState extends State<EventCustomer> {
 //                            color: Color(0xFF3B5998),
 //                          ),
 //                        ),
+                              ],
+                            ),
+                          ), //Button JOIN
+                          SizedBox(
+                            height: 22.0,
+                          ),
+                          Divider(
+                            height: 8.0,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          Center(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.blueGrey[300],
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text(
+                                  ' The Creator ',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                )),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Container(
+                                width: 75,
+                                height: 75,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          snapshot.data['userPic'])),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(snapshot.data['userEmail']),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                      'Quantity : ${snapshot.data['userAmount']}'),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                            height: 5.0,
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Center(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.blueGrey[300],
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text(
+                                  ' Shop ',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                )),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Container(
+                                width: 75,
+                                height: 75,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        snapshot.data['shopPic'] ?? avatar),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(snapshot.data['shopEmail'] ??
+                                      'No Shop offer'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(snapshot.data['shopAmount'] ??
+                                      'Quantity : 0'),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
-                    ), //Button JOIN
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Divider(
-                      height: 5.0,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Center(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.blueGrey[300],
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            ' The Creator ',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Container(
-                          width: 75,
-                          height: 75,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    eventNotifier.currentEvent.userPic)),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(eventNotifier.currentEvent.userEmail),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                                'Quantity : ${eventNotifier.currentEvent.userAmount.toString()}'),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Divider(
-                      color: Colors.grey,
-                      height: 5.0,
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Center(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.blueGrey[300],
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            ' Shop ',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Container(
-                          width: 75,
-                          height: 75,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  eventNotifier.currentEvent.shopPic ?? avatar),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(eventNotifier.currentEvent.shopEmail ??
-                                'No Shop offer'),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(eventNotifier.currentEvent.shopAmount ??
-                                'Quantity : 0'),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
+
+//      body: RefreshIndicator(
+//        onRefresh: _refreshEvent,
+//        child: SafeArea(
+//          child: ListView(
+//            children: <Widget>[
+//              Center(
+//                child: Column(
+//                  crossAxisAlignment: CrossAxisAlignment.center,
+//                  mainAxisAlignment: MainAxisAlignment.center,
+//                  children: <Widget>[
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    _showImage(),
+//                    SizedBox(
+//                      height: 12,
+//                    ),
+//                    Text(
+//                      'Product : ${eventNotifier.currentEvent.productName}',
+//                      style: TextStyle(fontSize: 15),
+//                    ),
+//                    SizedBox(
+//                      height: 12,
+//                    ),
+//                    Text(
+//                      'Category : ${eventNotifier.currentEvent.category}',
+//                      style: TextStyle(fontSize: 15),
+//                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.symmetric(
+//                          horizontal: 20, vertical: 12),
+//                      child: Card(
+//                        color: Colors.grey[200],
+//                        elevation: 1.1,
+//                        child: Container(
+//                          decoration: BoxDecoration(
+//                            borderRadius: BorderRadius.circular(20.0),
+//                          ),
+//                          width: MediaQuery.of(context).size.width,
+//                          height: 100.0,
+//                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+//                          child: Center(
+//                            child: Text(eventNotifier.currentEvent.eventDetail),
+//                          ),
+//                        ),
+//                      ),
+//                    ), //DETAIL PRODUCT
+//                    SizedBox(
+//                      height: 10.0,
+//                    ),
+//                    Row(
+//                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                      children: <Widget>[
+//                        Text('Quantity : ${eventNotifier.currentEvent.currentAmount}'),
+//                        Text('Shop Require : ${eventNotifier.currentEvent.shopAmount ?? '0'}'),
+//                      ],
+//                    ),
+//                    SizedBox(
+//                      height: 10.0,
+//                    ),
+//                    SizedBox(
+//                      height: 10.0,
+//                    ),
+//                    Column(
+//                      children: <Widget>[
+//                        Text(
+//                            'Resposible by Shop : ${eventNotifier.currentEvent.shopEmail ?? '0'}'),
+//                        SizedBox(
+//                          height: 10.0,
+//                        ),
+//                        Text(
+//                            'Price per piece : ${eventNotifier.currentEvent.mediumPrice}'),
+//                      ],
+//                    ),
+//                    SizedBox(
+//                      height: 20.0,
+//                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.symmetric(horizontal: 20),
+//                      child: Container(
+//                        decoration: BoxDecoration(
+//                            border: Border.all(color: Colors.grey, width: 1),
+//                            borderRadius: BorderRadius.circular(12)),
+//                        child: Column(
+//                          children: <Widget>[
+//                            SizedBox(
+//                              height: 12,
+//                            ),
+//                            Center(
+//                              child: Column(
+//                                children: <Widget>[
+//                                  Text(
+//                                    'Choice',
+//                                    style: TextStyle(
+//                                        color: Colors.red, fontSize: 22),
+//                                  ),
+//                                  SizedBox(
+//                                    height: 8,
+//                                  ),
+//                                  Text(
+//                                    '** tap for choose',
+//                                    style: TextStyle(color: Colors.red),
+//                                  ),
+//                                  SizedBox(
+//                                    height: 8,
+//                                  ),
+//                                ],
+//                              ),
+//                            ),
+//                            GridView.builder(
+//                              shrinkWrap: true,
+//                              padding: EdgeInsets.symmetric(horizontal: 42),
+//                              itemCount:
+//                              eventNotifier.currentEvent.variations.length,
+//                              gridDelegate:
+//                              SliverGridDelegateWithFixedCrossAxisCount(
+//                                  crossAxisCount: 2,
+//                                  mainAxisSpacing: 4,
+//                                  crossAxisSpacing: 4),
+//                              itemBuilder: (context, index) {
+//                                return Padding(
+//                                  padding: const EdgeInsets.symmetric(
+//                                      horizontal: 22, vertical: 22),
+//                                  child: InkWell(
+//                                    onTap: () => _forUser(eventNotifier
+//                                        .currentEvent.variations[index]
+//                                        .toString()),
+//                                    splashColor: Colors.red,
+//                                    focusColor: Colors.red,
+//                                    highlightColor: Colors.red,
+//                                    child: Container(
+//                                      child: Center(
+//                                          child: Text(
+//                                            eventNotifier
+//                                                .currentEvent.variations[index]
+//                                                .toString(),
+//                                            style: TextStyle(color: Colors.white),
+//                                          )),
+//                                      decoration: BoxDecoration(
+//                                          color: Colors.blueGrey[300],
+//                                          border: Border.all(
+//                                              color: Colors.deepOrange[300],
+//                                              width: 2),
+//                                          shape: BoxShape.circle),
+//                                    ),
+//                                  ),
+//                                );
+//                              },
+//                            ),
+//                            SizedBox(
+//                              height: 8,
+//                            ),
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      height: 20,
+//                    ),
+//                    showForUser(),
+//                    SizedBox(
+//                      height: 20,
+//                    ),
+//                    Row(
+//                      children: <Widget>[
+//                        Padding(
+//                          padding: const EdgeInsets.symmetric(
+//                              horizontal: 30, vertical: 6),
+//                          child: Text(
+//                            'Quantity',
+//                            style: TextStyle(
+//                                color: Colors.red, fontWeight: FontWeight.bold),
+//                          ),
+//                        ),
+//                      ],
+//                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//                      child: Container(
+//                        width: MediaQuery.of(context).size.width,
+//                        height: 50,
+//                        decoration: BoxDecoration(
+//                            borderRadius: BorderRadius.circular(10.0),
+//                            color: Colors.grey[200]),
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                          children: <Widget>[
+//                            RawMaterialButton(
+//                              onPressed: minus,
+//                              child: Icon(
+//                                Icons.remove,
+//                                color: Colors.blueGrey[300],
+//                              ),
+//                            ),
+//                            Text(
+//                              '$_count',
+//                              style: TextStyle(
+//                                  color: Colors.blueGrey[300], fontSize: 18),
+//                            ),
+//                            RawMaterialButton(
+//                              onPressed: add,
+//                              child: Icon(
+//                                Icons.add,
+//                                color: Colors.blueGrey[300],
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      height: 20.0,
+//                    ),
+//                    Column(
+//                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                      children: <Widget>[
+//                        Text('Date Start : ' + DateFormat('hh:mm:ss dd-MM-yyyy ').format(eventNotifier.currentEvent.createAt.toDate())),
+//                        SizedBox(
+//                          height: 5,
+//                        ),
+//                        Text('Date End : ' + DateFormat('hh:mm:ss dd-MM-yyyy ').format(eventNotifier.currentEvent.endAt.toDate())),
+//                      ],
+//                    ), //DATE
+//                    SizedBox(
+//                      height: 10.0,
+//                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//                      child: Row(
+//                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                        children: <Widget>[
+//                          Expanded(
+//                            flex: 1,
+//                            child: Container(
+//                              width: MediaQuery.of(context).size.width,
+//                              child: RaisedButton(
+//                                color: Colors.blueGrey[200],
+//                                focusColor: Colors.red,
+//                                splashColor: Colors.red,
+//                                highlightColor: Colors.red,
+//                                onPressed: () {
+//                                  print('fuckkkkk');
+//                                  _showDialog();
+//                                },
+//                                elevation: 1.1,
+//                                shape: RoundedRectangleBorder(
+//                                    borderRadius: BorderRadius.circular(20)),
+//                                child: Text(
+//                                  'JOIN',
+//                                  style: TextStyle(
+//                                      color: Colors.white, fontSize: 18),
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+//                          SizedBox(
+//                            width: 10.0,
+//                          ),
+//                          Expanded(
+//                            flex: 1,
+//                            child: Container(
+//                              width: MediaQuery.of(context).size.width,
+//                              child: RaisedButton(
+//                                color: Colors.blueGrey[200],
+//                                onPressed: () {},
+//                                elevation: 1.1,
+//                                shape: RoundedRectangleBorder(
+//                                    borderRadius: BorderRadius.circular(20)),
+//                                child: Text(
+//                                  'Delete',
+//                                  style: TextStyle(
+//                                      color: Colors.white, fontSize: 18),
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+////                        IconButton(
+////                          onPressed: () {},
+////                          icon: Icon(
+////                            Icons.share,
+////                            color: Color(0xFF3B5998),
+////                          ),
+////                        ),
+//                        ],
+//                      ),
+//                    ), //Button JOIN
+//                    SizedBox(
+//                      height: 20.0,
+//                    ),
+//                    Divider(
+//                      height: 5.0,
+//                      color: Colors.grey,
+//                    ),
+//                    SizedBox(
+//                      height: 10.0,
+//                    ),
+//                    Center(
+//                      child: Container(
+//                          decoration: BoxDecoration(
+//                              color: Colors.blueGrey[300],
+//                              borderRadius: BorderRadius.circular(5)),
+//                          child: Text(
+//                            ' The Creator ',
+//                            style: TextStyle(color: Colors.white, fontSize: 20),
+//                          )),
+//                    ),
+//                    Row(
+//                      children: <Widget>[
+//                        SizedBox(
+//                          width: 40,
+//                        ),
+//                        Container(
+//                          width: 75,
+//                          height: 75,
+//                          decoration: BoxDecoration(
+//                            shape: BoxShape.circle,
+//                            image: DecorationImage(
+//                                fit: BoxFit.cover,
+//                                image: NetworkImage(
+//                                    eventNotifier.currentEvent.userPic)),
+//                          ),
+//                        ),
+//                        SizedBox(
+//                          width: 40,
+//                        ),
+//                        Column(
+//                          children: <Widget>[
+//                            Text(eventNotifier.currentEvent.userEmail),
+//                            SizedBox(
+//                              height: 5,
+//                            ),
+//                            Text(
+//                                'Quantity : ${eventNotifier.currentEvent.userAmount.toString()}'),
+//                          ],
+//                        ),
+//                      ],
+//                    ),
+//                    SizedBox(
+//                      height: 10.0,
+//                    ),
+//                    Divider(
+//                      color: Colors.grey,
+//                      height: 5.0,
+//                    ),
+//                    SizedBox(
+//                      height: 5.0,
+//                    ),
+//                    Center(
+//                      child: Container(
+//                          decoration: BoxDecoration(
+//                              color: Colors.blueGrey[300],
+//                              borderRadius: BorderRadius.circular(5)),
+//                          child: Text(
+//                            ' Shop ',
+//                            style: TextStyle(color: Colors.white, fontSize: 20),
+//                          )),
+//                    ),
+//                    Row(
+//                      children: <Widget>[
+//                        SizedBox(
+//                          width: 40,
+//                        ),
+//                        Container(
+//                          width: 75,
+//                          height: 75,
+//                          decoration: BoxDecoration(
+//                            shape: BoxShape.circle,
+//                            image: DecorationImage(
+//                              fit: BoxFit.cover,
+//                              image: NetworkImage(
+//                                  eventNotifier.currentEvent.shopPic ?? avatar),
+//                            ),
+//                          ),
+//                        ),
+//                        SizedBox(
+//                          width: 40,
+//                        ),
+//                        Column(
+//                          children: <Widget>[
+//                            Text(eventNotifier.currentEvent.shopEmail ??
+//                                'No Shop offer'),
+//                            SizedBox(
+//                              height: 5,
+//                            ),
+//                            Text(eventNotifier.currentEvent.shopAmount ??
+//                                'Quantity : 0'),
+//                          ],
+//                        ),
+//                      ],
+//                    ),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                  ],
+//                ),
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
     );
   }
 
   @override
-  Widget show(BuildContext context){
+  Widget show(BuildContext context) {
 //     ListView.builder(
 //       itemCount: eventNotifier.userJoinList.length,
 //       itemBuilder: (context,index){
@@ -897,19 +1341,25 @@ class _EventCustomerState extends State<EventCustomer> {
 //      },
 //    );
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('events').document(_currentEvent.eventId).collection('userJoin').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-        if(snapshot.hasError)
-          return Text('er ${snapshot.error}');
-        switch(snapshot.connectionState){
-          case ConnectionState.waiting: return Center(child: Text('load'),);
-          default: return ListView(
-              children: snapshot.data.documents.map((DocumentSnapshot docs){
-                return ListTile(
-                  leading: Image.network(docs['userPic']),
-                );
-              }).toList()
-          );
+      stream: Firestore.instance
+          .collection('events')
+          .document(_currentEvent.eventId)
+          .collection('userJoin')
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return Text('er ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(
+              child: Text('load'),
+            );
+          default:
+            return ListView(
+                children: snapshot.data.documents.map((DocumentSnapshot docs) {
+              return ListTile(
+                leading: Image.network(docs['userPic']),
+              );
+            }).toList());
         }
       },
     );
@@ -922,12 +1372,11 @@ class _EventCustomerState extends State<EventCustomer> {
         .collection('userJoin')
         .orderBy('joinAt', descending: true)
         .getDocuments();
-    if (snapshot.documents.length != null)
-      print('ok');
+    if (snapshot.documents.length != null) print('ok');
 
     List<UserJoin> _userJoinList = [];
 
-    snapshot.documents.forEach((docs){
+    snapshot.documents.forEach((docs) {
       UserJoin userJoin = UserJoin.fromMap(docs.data);
       _userJoinList.add(userJoin);
     });

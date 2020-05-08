@@ -21,73 +21,73 @@ class _NotificationCustomerState extends State<NotificationCustomer> {
             SizedBox(
               height: 10.0,
             ),
-            ListTile(
-              onTap: (){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>MainEvent())
-                );
-              },
-              leading: CircleAvatar(
-                backgroundImage: AssetImage('assets/prototype/sony.jpg'),
-                backgroundColor: Colors.transparent,
-                radius: 30,
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Sony wf-1000xm3'),
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.access_time),
-                        Text('2020/1/16'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: RaisedButton(
-                        onPressed: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context)=>Checkouts())
-                          );
-                        },
-                        elevation: 1.1,
-                        child: Text('OK',style: TextStyle(color: Colors.white),),
-                        color: Colors.blueGrey,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: RaisedButton(
-                        onPressed: (){},
-                        elevation: 1.1,
-                        child: Text('Cancel',style: TextStyle(color: Colors.white),),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+//            ListTile(
+//              onTap: (){
+//                Navigator.push(context,
+//                    MaterialPageRoute(builder: (context)=>MainEvent())
+//                );
+//              },
+//              leading: CircleAvatar(
+//                backgroundImage: AssetImage('assets/prototype/sony.jpg'),
+//                backgroundColor: Colors.transparent,
+//                radius: 30,
+//              ),
+//              title: Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                children: <Widget>[
+//                  Text('Sony wf-1000xm3'),
+//                  Container(
+//                    child: Row(
+//                      children: <Widget>[
+//                        Icon(Icons.access_time),
+//                        Text('2020/1/16'),
+//                      ],
+//                    ),
+//                  ),
+//                ],
+//              ),
+//              subtitle: Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                children: <Widget>[
+//                  Expanded(
+//                    flex: 1,
+//                    child: Container(
+//                      width: MediaQuery.of(context).size.width,
+//                      child: RaisedButton(
+//                        onPressed: (){
+//                          Navigator.push(context,
+//                              MaterialPageRoute(builder: (context)=>Checkouts())
+//                          );
+//                        },
+//                        elevation: 1.1,
+//                        child: Text('OK',style: TextStyle(color: Colors.white),),
+//                        color: Colors.blueGrey,
+//                        shape: RoundedRectangleBorder(
+//                            borderRadius: BorderRadius.circular(10)
+//                        ),
+//                      ),
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    width: 10.0,
+//                  ),
+//                  Expanded(
+//                    flex: 1,
+//                    child: Container(
+//                      width: MediaQuery.of(context).size.width,
+//                      child: RaisedButton(
+//                        onPressed: (){},
+//                        elevation: 1.1,
+//                        child: Text('Cancel',style: TextStyle(color: Colors.white),),
+//                        shape: RoundedRectangleBorder(
+//                            borderRadius: BorderRadius.circular(10)
+//                        ),
+//                      ),
+//                    ),
+//                  ),
+//                ],
+//              ),
+//            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Divider(
