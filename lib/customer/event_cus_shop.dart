@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class EventCusShop extends StatefulWidget {
   String evID;
+
   EventCusShop(this.evID);
+
   @override
   _EventCusShopState createState() => _EventCusShopState();
 }
@@ -13,123 +15,171 @@ class EventCusShop extends StatefulWidget {
 class _EventCusShopState extends State<EventCusShop> {
   var uid;
 
-  _deal(String userId)async{
+  _deal(String userId, String shopID, String shopAmount, String shopPic, String shopPrice, String shopEmail) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     setState(() {
       uid = user.uid;
     });
     if (uid != userId) {
       showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return AlertDialog(
-            elevation: 1.1,
-            title: Text('You can\'t deal'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                  print('OKayy');
-                  print(userId);
-                },
-                child: Text('OK',style: TextStyle(color: Colors.red),),
-              )
-            ],
-          );
-        }
-      );
-    }else{
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              elevation: 1.1,
+              title: Text('You can\'t deal'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    print('OKayy');
+                    print(userId);
+                  },
+                  child: Text(
+                    'OK',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                )
+              ],
+            );
+          });
+    } else {
       return showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return AlertDialog(
-            elevation: 1.1,
-            title: Text('OK'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                  print('ok112');
-                },
-                child: Text('ok'),
-              ),
-            ],
-          );
-        }
-      );
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              elevation: 1.1,
+              title: Text('OK'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    _chooseShop(shopID, shopAmount, shopPic, shopPrice, shopEmail);
+                    print('ok112');
+                  },
+                  child: Text('ok'),
+                ),
+              ],
+            );
+          });
     }
+  }
+
+  _chooseShop(String shopID, String shopAmount, String shopPic, String shopPrice, String shopEmail) async {
+    DocumentReference docRef = Firestore.instance.collection('events').document(widget.evID);
+    docRef.setData({
+      'shopOwnId':shopID,
+      'shopAmount' : shopAmount,
+      'shopPic':shopPrice,
+      'shopPrice':shopPic,
+      'shopEmail':shopEmail,
+    },merge: true).then((value){
+      print('choose shop ok');
+      Navigator.pop(context);
+    }).catchError((e){
+      print('ert $e');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: StreamBuilder(
-          stream: Firestore.instance.collection('events').document(widget.evID).collection('shopJoin').orderBy('joinAt',descending: false).snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-            if (!snapshot.hasData) {
-              return Center(
-                child: Text('Null'),
-              );
-            }else{
-              return ListView(
-                  children: snapshot.data.documents.map((DocumentSnapshot docs) =>
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.grey,width: 2),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(docs['shopPic'])
-                                ),
-                              ),
-                            ),
+      body: StreamBuilder(
+        stream: Firestore.instance
+            .collection('events')
+            .document(widget.evID)
+            .collection('shopJoin')
+            .orderBy('joinAt', descending: false)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text('Null'),
+            );
+          } else {
+            List<DocumentSnapshot> reversedDocuments = snapshot.data.documents.reversed.toList();
+            return ListView.separated(
+              separatorBuilder: (context, index) {
+                return SizedBox(
+                  height: 8,
+                  child: Divider(
+                    height: 1,
+                    color: Colors.red,
+                  ),
+                );
+              },
+              itemCount: reversedDocuments.length,
+              itemBuilder: (context, index) {
+                var shopId = reversedDocuments[index].data['shopID'];
+                var shopEmail = reversedDocuments[index].data['shopEmail'];
+                var shopPic = reversedDocuments[index].data['shopPic'];
+                var shopPrice = reversedDocuments[index].data['shopPrice'];
+                var shopAmount = reversedDocuments[index].data['shopAmount'];
+                return Row(
+                  children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey, width: 2),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                                reversedDocuments[index].data['shopPic']),
                           ),
-                          Column(
-                            children: <Widget>[
-                              Text(docs['shopEmail']),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text('Price : ' + docs['shopPrice']),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text('Quantity : ' + docs['shopAmount']),
-                              SizedBox(
-                                height: 12,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 22,
-                          ),
-                          RaisedButton(
-                            onPressed: (){
-                              print('okok');
-                              _deal(docs['userId']);
-                            },
-                            elevation: 1.1,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22)
-                            ),
-                            focusColor: Colors.red,
-                            splashColor: Colors.red,
-                            color: Colors.blueGrey[300],
-                            child: Text('Deal' , style: TextStyle(fontSize: 22,color: Colors.white),),
-                          ),
-                        ],
+                        ),
                       ),
-                  ).toList()
-              );
-            }
-          },
-        ),
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(reversedDocuments[index].data['shopEmail']),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text('Price : ' +
+                            reversedDocuments[index].data['shopPrice']),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text('Quantity : ' +
+                            reversedDocuments[index].data['shopAmount']),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 22,
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        print('okok');
+                        _deal(
+                          reversedDocuments[index].data['userId'],
+                          shopId,
+                          shopAmount,
+                          shopPrice,
+                          shopPic,
+                          shopEmail
+                        );
+                      },
+                      elevation: 1.1,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22)),
+                      focusColor: Colors.red,
+                      splashColor: Colors.red,
+                      color: Colors.blueGrey[300],
+                      child: Text(
+                        'Deal',
+                        style: TextStyle(fontSize: 22, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        },
+      ),
 //      body: SafeArea(
 //        child: ListView(
 //          children: <Widget>[

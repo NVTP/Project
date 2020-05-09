@@ -6,7 +6,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/cache.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/cache.dill" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/customer/event_cus_shop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/event_cus_shop.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shop/shop_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shop/shop_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/event_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/event_customer.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

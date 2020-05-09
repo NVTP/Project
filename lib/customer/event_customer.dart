@@ -485,9 +485,6 @@ class _EventCustomerState extends State<EventCustomer> {
               .document(widget.evID)
               .snapshots(),
           builder: (context, snapshot) {
-            var productName = snapshot.data['productName'];
-            var image = snapshot.data['image'];
-            var currentAmount = snapshot.data['currentAmount'];
             if (!snapshot.hasData) return Center(child: Text('loading'));
             return SingleChildScrollView(
               child: Center(
@@ -500,12 +497,12 @@ class _EventCustomerState extends State<EventCustomer> {
                       SizedBox(
                         height: 10,
                       ),
-                      _showImage(image),
+                      _showImage(snapshot.data['image']),
                       SizedBox(
                         height: 12,
                       ),
                       Text(
-                        'Product : $productName',
+                        'Product : ${snapshot.data['productName']}',
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(
@@ -541,7 +538,7 @@ class _EventCustomerState extends State<EventCustomer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Text('Quantity : $currentAmount'),
+                          Text('Quantity : ${snapshot.data['currentAmount']}'),
                           Text(
                               'Shop Require : ${snapshot.data['shopAmount'] ?? '0'}'),
                         ],
@@ -888,7 +885,7 @@ class _EventCustomerState extends State<EventCustomer> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text(snapshot.data['shopAmount'] ??
+                                  Text('Quantity : '+snapshot.data['shopAmount'] ??
                                       'Quantity : 0'),
                                 ],
                               ),
