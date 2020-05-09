@@ -108,19 +108,11 @@ class _CartCusJoinState extends State<CartCusJoin> {
     }
 
     if (eventNotifier.userJoinList.isEmpty) {
-      return Column(
-        children: <Widget>[
-          Center(
-            child: Text(
-              'Sorry you don\'t have',
-              style: TextStyle(color: Colors.red, fontSize: 40),
-            ),
-          ),
-          RaisedButton(
-            onPressed: () => getNew(eventNotifier),
-            child: Text('ok'),
-          ),
-        ],
+      return Center(
+        child: Text(
+          'Sorry you don\'t have',
+          style: TextStyle(color: Colors.red, fontSize: 40),
+        ),
       );
     }
     return Scaffold(

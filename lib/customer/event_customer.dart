@@ -885,8 +885,14 @@ class _EventCustomerState extends State<EventCustomer> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text('Quantity : '+snapshot.data['shopAmount'] ??
-                                      'Quantity : 0'),
+                                  Row(
+                                    children: <Widget>[
+                                      Text('Quantity : '),
+                                      Text(snapshot.data['shopAmount'] ?? '0')
+                                    ],
+                                  ),
+//                                  Text('Quantity : '+snapshot.data['shopAmount'] ??
+//                                      'Quantity : 0'),
                                 ],
                               ),
                             ],

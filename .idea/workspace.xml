@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="356b5ddb-4c87-43b9-9681-0fd99b565a19" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/cache.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/cache.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/customer/event_cus_shop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/event_cus_shop.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/cart_customer_join.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/cart_customer_join.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/customer/event_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/event_customer.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
