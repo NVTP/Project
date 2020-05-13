@@ -557,7 +557,7 @@ class _EventCustomerState extends State<EventCustomer> {
                             height: 10.0,
                           ),
                           Text(
-                              'Price per piece : ${snapshot.data['mediumPrice']}'),
+                              'Medium price per piece : ${snapshot.data['mediumPrice']}'),
                           SizedBox(
                             height: 12,
                           ),
@@ -891,8 +891,15 @@ class _EventCustomerState extends State<EventCustomer> {
                                       Text(snapshot.data['shopAmount'] ?? '0')
                                     ],
                                   ),
-//                                  Text('Quantity : '+snapshot.data['shopAmount'] ??
-//                                      'Quantity : 0'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text('Price : '),
+                                      Text(snapshot.data['shopPrice'] ?? '0')
+                                    ],
+                                  ),
                                 ],
                               ),
                             ],

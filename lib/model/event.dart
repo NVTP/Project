@@ -23,6 +23,7 @@ class Events{
   String shopEmail;
   String shopPrice;
   String shopAmount;
+  String status;
 
   Events();
 
@@ -49,6 +50,7 @@ class Events{
     shopEmail = data['shopEmail'];
     shopPrice = data['shopPrice'];
     shopAmount = data['shopAmount'];
+    status = data['atatus'];
   }
 
   Map<String, dynamic>toMap(){
@@ -75,6 +77,7 @@ class Events{
       'shopEmail':shopEmail,
       'shopPrice':shopPrice,
       'shopAmount':shopAmount,
+      'status':status,
     };
   }
 }

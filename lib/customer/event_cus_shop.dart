@@ -71,6 +71,7 @@ class _EventCusShopState extends State<EventCusShop> {
       'shopPic':shopPrice,
       'shopPrice':shopPic,
       'shopEmail':shopEmail,
+      'stauts':'Wait pay'
     },merge: true).then((value){
       print('choose shop ok');
       Navigator.pop(context);

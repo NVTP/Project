@@ -91,10 +91,10 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
                               );
                             },
                             leading: Icon(
-                              Icons.person,
+                              Icons.event,
                             ),
                             title: Text(
-                              'Profile',
+                              'Status',
                               style: TextStyle(
                                   color: Colors.grey
                               ),
@@ -113,10 +113,10 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
                               );
                             },
                             leading: Icon(
-                              Icons.settings,
+                              Icons.person,
                             ),
                             title: Text(
-                              'Setting',
+                              'Setting Profile',
                               style: TextStyle(
                                   color: Colors.grey
                               ),
