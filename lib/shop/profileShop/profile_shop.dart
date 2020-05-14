@@ -15,7 +15,7 @@ class _ProfileShopState extends State<ProfileShop> {
   var proFile;
   var inStead = 'https://firebasestorage.googleapis.com/v0/b/login-ce9de.appspot.com/o/user%2Fimages.png?alt=media&token=bbc9397d-f425-4834-82f1-5e6855b4a171';
   var email;
-
+  var uid;
 
   @override
   void initState(){
@@ -24,6 +24,7 @@ class _ProfileShopState extends State<ProfileShop> {
       setState(() {
         proFile = user.photoUrl;
         email = user.email;
+        uid = user.uid;
       });
     }).catchError((e){
       print('first Error $e');
@@ -86,10 +87,10 @@ class _ProfileShopState extends State<ProfileShop> {
                       );
                     },
                     leading: Icon(
-                      Icons.person,
+                      Icons.event,
                     ),
                     title: Text(
-                      'Profile',
+                      'Status',
                       style: TextStyle(
                           color: Colors.grey
                       ),
@@ -104,14 +105,14 @@ class _ProfileShopState extends State<ProfileShop> {
                   ListTile(
                     onTap: (){
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context)=>UpdateShop())
+                          MaterialPageRoute(builder: (context)=>UpdateShop(uid))
                       );
                     },
                     leading: Icon(
-                      Icons.settings,
+                      Icons.person,
                     ),
                     title: Text(
-                      'Setting',
+                      'Setting Profile',
                       style: TextStyle(
                           color: Colors.grey
                       ),

@@ -174,14 +174,14 @@ class _ShopEventState extends State<ShopEvent> {
                         border: Border.all(width: 2, color: Colors.grey[300]),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(image),
+                          image: NetworkImage(snapshot.data['image']),
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 8,
                     ),
-                    Text(productName),
+                    Text(snapshot.data['productName']),
                     SizedBox(
                       height: 4,
                     ),
@@ -215,7 +215,7 @@ class _ShopEventState extends State<ShopEvent> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Text(
-                            'Amount : ${currentAmount ?? '0'}'),
+                            'Amount : ${snapshot.data['currentAmount'] ?? '0'}'),
                         Text(
                             'Shop Require : ${snapshot.data['shopAmount'] ?? '0'}'),
                       ],

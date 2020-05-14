@@ -62,7 +62,7 @@ class _MainShopState extends State<MainShop> {
                   Icons.notifications
               ),
               title: Text(
-                'Notification',style: TextStyle(fontSize: 10),
+                'Status',style: TextStyle(fontSize: 10),
               ),
             ),//NOTIFICATION
             BottomNavigationBarItem(

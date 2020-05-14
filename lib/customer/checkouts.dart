@@ -111,7 +111,8 @@ class _CheckoutsState extends State<Checkouts> {
                         'amount' : widget.amount,
                         'tel' : _tel.text,
                         'name' : _name.text,
-                        'payment' : 'destination'
+                        'payment' : 'destination',
+                        'payAt' : Timestamp.now(),
                       }).then((user){
                         print('pay ok');
                         Navigator.pushReplacement(
@@ -129,7 +130,8 @@ class _CheckoutsState extends State<Checkouts> {
                         'address' : _address.text,
                         'amount' : widget.amount,
                         'tel' : _tel.text,
-                        'name' : _name.text
+                        'name' : _name.text,
+                        'payAt' : Timestamp.now()
                       }).then((user){
                         print('pay ok');
                         Navigator.pushReplacement(
