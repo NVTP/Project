@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalproject/customer/choice/credit_card.dart';
+import 'package:finalproject/customer/controlPageCustomer/main_customer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Checkouts extends StatefulWidget {
@@ -14,15 +16,29 @@ class _CheckoutsState extends State<Checkouts> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _address;
   TextEditingController _tel;
+  TextEditingController _name;
   bool _checkOuts;
+  var uid;
+  var email;
+  var pic;
 
   @override
   void initState() {
     // TODO: implement initState
     _address = TextEditingController();
     _tel = TextEditingController();
+    _name = TextEditingController();
     _checkOuts = false;
     super.initState();
+    FirebaseAuth.instance.currentUser().then((user){
+      setState(() {
+        uid = user.uid;
+        pic = user.photoUrl;
+        email = user.email;
+      });
+    }).catchError((e){
+      print('erna $e');
+    });
   }
   _showPrice(String price, String amount){
     var resPrice = int.parse(price);
@@ -36,9 +52,10 @@ class _CheckoutsState extends State<Checkouts> {
     );
   }
 
-  _check(String address, String status,String tel) async{
+  _check(String address, String status,String tel,String name) async{
     print(address);
     print(status);
+    _formKey.currentState.save();
     if (status == null) {
       return showDialog(
           context: context,
@@ -62,7 +79,7 @@ class _CheckoutsState extends State<Checkouts> {
           }
       );
     }else{
-      DocumentReference docRef = Firestore.instance.collection('events').document(widget.uid);
+      CollectionReference colRef = Firestore.instance.collection('events').document(widget.uid).collection('payment');
       return showDialog(
           context: context,
           builder: (context){
@@ -74,6 +91,8 @@ class _CheckoutsState extends State<Checkouts> {
                   onPressed: (){
                     Navigator.pop(context);
                     _address.clear();
+                    _tel.clear();
+                    _name.clear();
                     setState(() {
                       _checkOuts = false;
                     });
@@ -83,13 +102,44 @@ class _CheckoutsState extends State<Checkouts> {
                 FlatButton(
                   child: Text('OK',style: TextStyle(color: Colors.red),),
                   onPressed: (){
-                    docRef.setData({
-                      'address' : _address.text,
-                      'amount' : widget.amount,
-                      'tel' : tel.toString()
-                    }).catchError((e){
-                      print('check er $e');
-                    });
+                    if (_checkOuts == true) {
+                      colRef.add({
+                        'userId':uid,
+                        'userEmail':email,
+                        'userPic':pic,
+                        'address' : _address.text,
+                        'amount' : widget.amount,
+                        'tel' : _tel.text,
+                        'name' : _name.text,
+                        'payment' : 'destination'
+                      }).then((user){
+                        print('pay ok');
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context)=>MainCustomer())
+                        );
+                      }).catchError((e){
+                        print('ck er $e');
+                      });
+                    }else{
+                      colRef.add({
+                        'userId':uid,
+                        'userEmail':email,
+                        'userPic':pic,
+                        'address' : _address.text,
+                        'amount' : widget.amount,
+                        'tel' : _tel.text,
+                        'name' : _name.text
+                      }).then((user){
+                        print('pay ok');
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context)=>MainCustomer())
+                        );
+                      }).catchError((e){
+                        print('check er $e');
+                      });
+                    }
                   },
                 ),
               ],
@@ -143,7 +193,7 @@ class _CheckoutsState extends State<Checkouts> {
                                     style: TextStyle(color: Colors.black),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: snapshot.data['status'],
+                                        text: snapshot.data['status'] ?? 'Wait shop',
                                         style: TextStyle(color: Colors.red)
                                       ),
                                     ]
@@ -189,12 +239,37 @@ class _CheckoutsState extends State<Checkouts> {
                                 child: Column(
                                   children: <Widget>[
                                     TextFormField(
+                                      controller: _name,
+                                      keyboardType: TextInputType.multiline,
+                                      textAlign: TextAlign.justify,
+                                      maxLines: null,
+                                      decoration: InputDecoration(
+                                        hintText: 'Name',
+                                        hintStyle: TextStyle(color: Colors.blueGrey[300]),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10.0)
+                                        ),
+                                      ),
+                                      validator: (data){
+                                        if (data.isEmpty) {
+                                          return 'Please fill Name';
+                                        }else if(data.length > 4){
+                                          return null;
+                                        }else{
+                                          return null;
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    TextFormField(
                                       controller: _address,
                                       keyboardType: TextInputType.multiline,
                                       textAlign: TextAlign.justify,
                                       maxLines: null,
                                       decoration: InputDecoration(
-                                        hintText: 'Name Address',
+                                        hintText: 'Address',
                                         hintStyle: TextStyle(color: Colors.blueGrey[300]),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(10.0)
@@ -244,7 +319,7 @@ class _CheckoutsState extends State<Checkouts> {
                               Column(
                                 children: <Widget>[
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Checkbox(
                                         value: _checkOuts,
@@ -255,51 +330,78 @@ class _CheckoutsState extends State<Checkouts> {
                                         },
                                       ),
                                       Text('Payment destination'),
-                                      Text('< OR >',style: TextStyle(color: Colors.red),),
-                                      RaisedButton(
-                                        onPressed: (){
-                                          Navigator.push(context,
-                                              MaterialPageRoute(builder: (context)=>CreditCard())
-                                          );
-                                        },
-                                        elevation: 1.1,
-                                        color: Colors.blueGrey[300],
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20)
-                                        ),
-                                        child: Text('Credit Card',style: TextStyle(color: Colors.white,),),
-                                      ),
                                     ],
+                                  ),
+                                  Text('< OR >',style: TextStyle(color: Colors.red),),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  RaisedButton(
+                                    onPressed: (){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context)=>CreditCard())
+                                      );
+                                    },
+                                    elevation: 1.1,
+                                    color: Colors.blueGrey[300],
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    child: Text('Credit Card',style: TextStyle(color: Colors.white,),),
                                   ),
                                 ],
                               ),
                               SizedBox(
                                 height: 20.0,
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 50.0,
-                                child: RaisedButton(
-                                  onPressed: (){
-                                    if (_formKey.currentState.validate()) {
-                                      if (_checkOuts == false) {
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Container(
+                                    child: RaisedButton(
+                                      onPressed: (){
+                                        if (_formKey.currentState.validate()) {
+                                          if (_checkOuts == false) {
+                                            setState(() {
+                                              _checkOuts = true;
+                                            });
+                                            _check(_address.text,snapshot.data['status'],_tel.text,_name.text);
+                                          }
+                                        }
+                                      },
+                                      color: Colors.blueGrey[300],
+                                      elevation: 1.1,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Text(
+                                        'Checkouts',
+                                        style: TextStyle(color: Colors.white,fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: RaisedButton(
+                                      onPressed: (){
                                         setState(() {
-                                          _checkOuts = true;
+                                          _checkOuts = false;
+                                          _address.clear();
+                                          _tel.clear();
+                                          _name.clear();
                                         });
-                                        _check(_address.text,snapshot.data['status'],_tel.text);
-                                      }
-                                    }
-                                  },
-                                  color: Colors.blueGrey[300],
-                                  elevation: 1.1,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)
+                                      },
+                                      color: Colors.grey[300],
+                                      elevation: 1.1,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Text(
+                                        'Cancel',
+                                        style: TextStyle(color: Colors.white,fontSize: 20),
+                                      ),
+                                    ),
                                   ),
-                                  child: Text(
-                                    'Checkouts',
-                                    style: TextStyle(color: Colors.white,fontSize: 20),
-                                  ),
-                                ),
+                                ],
                               ),//CHECKOUTS
                               SizedBox(
                                 height: 20,

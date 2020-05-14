@@ -80,6 +80,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
           'gender': gender.toString().trim(),
           'email': _cusEmail.text.trim(),
           'uid': currentUser.user.uid,
+          'phone':_cusPhone.text,
           'role': 'user'
         }).then((user) {
           print('user ok ${currentUser}');

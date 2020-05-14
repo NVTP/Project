@@ -194,7 +194,7 @@ class _EventCustomerState extends State<EventCustomer> {
     });
   }
 
-  _showDialog() {
+  _showDialog(String amount, String productName,String image) {
     if (forUser.isEmpty) {
       return showDialog(
           context: context,
@@ -234,155 +234,150 @@ class _EventCustomerState extends State<EventCustomer> {
           builder: (BuildContext context) {
             return AlertDialog(
               elevation: 1.0,
-              title: Text('Enter Your Information'),
+              title: Text('Join event'),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(22),
                       bottomRight: Radius.circular(22))),
-              content: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Full Name',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          prefixIcon: Icon(Icons.person),
-                        ),
-                        keyboardType: TextInputType.text,
-                        maxLines: 1,
-                        controller: name,
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            return 'Please fill Full Name';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (val) {
-                          _userJoin.userName = val;
-                        },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'phone',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          prefixIcon: Icon(Icons.phone),
-                        ),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ],
-                        maxLines: 1,
-                        maxLength: 10,
-                        controller: phone,
-                        validator: (val) {
-                          if (val.isEmpty || val.length != 10) {
-                            return 'Phone number must be 10';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (val) {
-                          _userJoin.userPhone = val;
-                        },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Province',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          prefixIcon: Icon(Icons.account_balance),
-                        ),
-                        keyboardType: TextInputType.multiline,
-                        textAlign: TextAlign.justify,
-                        maxLines: null,
-                        controller: province,
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            return 'Province can\'t empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (val) {
-                          _userJoin.userProvince = val;
-                        },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Address',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          prefixIcon: Icon(Icons.home),
-                        ),
-                        keyboardType: TextInputType.multiline,
-                        textAlign: TextAlign.justify,
-                        maxLines: null,
-                        controller: address,
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            return 'Address can\'t be empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (val) {
-                          _userJoin.userAddress = val;
-                        },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                    ],
+//              content: SingleChildScrollView(
+//                child: Form(
+//                  key: _formKey,
+//                  child: Column(
+//                    children: <Widget>[
+//                      TextFormField(
+//                        decoration: InputDecoration(
+//                          hintText: 'Full Name',
+//                          border: OutlineInputBorder(
+//                              borderRadius: BorderRadius.circular(22.0)),
+//                          prefixIcon: Icon(Icons.person),
+//                        ),
+//                        keyboardType: TextInputType.text,
+//                        maxLines: 1,
+//                        controller: name,
+//                        validator: (val) {
+//                          if (val.isEmpty) {
+//                            return 'Please fill Full Name';
+//                          } else {
+//                            return null;
+//                          }
+//                        },
+//                        onSaved: (val) {
+//                          _userJoin.userName = val;
+//                        },
+//                      ),
+//                      SizedBox(
+//                        height: 4,
+//                      ),
+//                      TextFormField(
+//                        decoration: InputDecoration(
+//                          hintText: 'phone',
+//                          border: OutlineInputBorder(
+//                              borderRadius: BorderRadius.circular(22.0)),
+//                          prefixIcon: Icon(Icons.phone),
+//                        ),
+//                        keyboardType: TextInputType.number,
+//                        inputFormatters: [
+//                          WhitelistingTextInputFormatter.digitsOnly
+//                        ],
+//                        maxLines: 1,
+//                        maxLength: 10,
+//                        controller: phone,
+//                        validator: (val) {
+//                          if (val.isEmpty || val.length != 10) {
+//                            return 'Phone number must be 10';
+//                          } else {
+//                            return null;
+//                          }
+//                        },
+//                        onSaved: (val) {
+//                          _userJoin.userPhone = val;
+//                        },
+//                      ),
+//                      SizedBox(
+//                        height: 4,
+//                      ),
+//                      TextFormField(
+//                        decoration: InputDecoration(
+//                          hintText: 'Province',
+//                          border: OutlineInputBorder(
+//                              borderRadius: BorderRadius.circular(22.0)),
+//                          prefixIcon: Icon(Icons.account_balance),
+//                        ),
+//                        keyboardType: TextInputType.multiline,
+//                        textAlign: TextAlign.justify,
+//                        maxLines: null,
+//                        controller: province,
+//                        validator: (val) {
+//                          if (val.isEmpty) {
+//                            return 'Province can\'t empty';
+//                          } else {
+//                            return null;
+//                          }
+//                        },
+//                        onSaved: (val) {
+//                          _userJoin.userProvince = val;
+//                        },
+//                      ),
+//                      SizedBox(
+//                        height: 4,
+//                      ),
+//                      TextFormField(
+//                        decoration: InputDecoration(
+//                          hintText: 'Address',
+//                          border: OutlineInputBorder(
+//                              borderRadius: BorderRadius.circular(22.0)),
+//                          prefixIcon: Icon(Icons.home),
+//                        ),
+//                        keyboardType: TextInputType.multiline,
+//                        textAlign: TextAlign.justify,
+//                        maxLines: null,
+//                        controller: address,
+//                        validator: (val) {
+//                          if (val.isEmpty) {
+//                            return 'Address can\'t be empty';
+//                          } else {
+//                            return null;
+//                          }
+//                        },
+//                        onSaved: (val) {
+//                          _userJoin.userAddress = val;
+//                        },
+//                      ),
+//                      SizedBox(
+//                        height: 4,
+//                      ),
+//                    ],
+//                  ),
+//                ),
+//              ),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+//                    setState(() {
+//                      address.clear();
+//                      province.clear();
+//                      phone.clear();
+//                      name.clear();
+//                    });
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ),
-              ),
-              actions: <Widget>[
-                Row(
-                  children: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() {
-                          address.clear();
-                          province.clear();
-                          phone.clear();
-                          name.clear();
-                        });
-                      },
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        print('fuck you too');
-                        if (_formKey.currentState.validate()) {
-                          _onSubmit();
-                        }
-                      },
-                      child: Text(
-                        'OK',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ],
+                FlatButton(
+                  onPressed: () {
+                    print('fuck you too');
+                    if (_formKey.currentState.validate()) {
+                      _onSubmit(amount,productName,image);
+                    }
+                  },
+                  child: Text(
+                    'OK',
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ],
             );
@@ -390,31 +385,28 @@ class _EventCustomerState extends State<EventCustomer> {
     }
   }
 
-  _onSubmit() async {
+  _onSubmit(String amount, String productName,String image) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    var evID = _currentEvent.eventId;
-    print(evID);
-    print(_userJoin.userAddress);
-    var currentAmount = _currentEvent.currentAmount;
-    var result = _count + int.parse(currentAmount);
+    print(widget.evID);
+    var result = _count + int.parse(amount);
     var count = _count.toString();
     print(result.toString());
     var db = Firestore.instance;
     _userJoin.userVariations = forUser;
-    var evRef = db.collection('events').document(evID);
-    DocumentReference docRef = db.collection('events').document(evID);
+    var evRef = db.collection('events').document(widget.evID);
+    DocumentReference docRef = db.collection('events').document(widget.evID);
     evRef.updateData({'currentAmount': result.toString()});
-    evRef.collection('userJoin').document(user.uid).setData({
-      'eventId': evID,
+    evRef.collection('userJoin').add({
+      'eventId': widget.evID,
       'eventName': _currentEvent.eventName,
-      'productName': _currentEvent.productName,
+      'productName': productName,
       'currentAmount': result.toString(),
       'category': _currentEvent.category,
-      'image': _currentEvent.image,
+      'image': image,
       'userId': user.uid,
       'userName': _userJoin.userName,
       'userProvince': _userJoin.userProvince,
@@ -425,16 +417,17 @@ class _EventCustomerState extends State<EventCustomer> {
       'userAmount': count.toString(),
       'userVariation': _userJoin.userVariations,
       'joinAt': Timestamp.now(),
+    }).then((user){
     }).catchError((e) {
       print('fuck to join $e');
     });
     db.collection('users').document(user.uid).collection('userJoin').add({
-      'eventId': evID,
+      'eventId': widget.evID,
       'eventName': _currentEvent.eventName,
-      'productName': _currentEvent.productName,
+      'productName': productName,
       'currentAmount': result.toString(),
       'category': _currentEvent.category,
-      'image': _currentEvent.image,
+      'image': image,
       'userId': user.uid,
       'userName': _userJoin.userName,
       'userProvince': _userJoin.userProvince,
@@ -445,6 +438,7 @@ class _EventCustomerState extends State<EventCustomer> {
       'userAmount': count.toString(),
       'userVariation': _userJoin.userVariations,
       'joinAt': Timestamp.now()
+    }).then((user){
     }).catchError((e) {
       print('user Fuck join $e');
     });
@@ -458,9 +452,7 @@ class _EventCustomerState extends State<EventCustomer> {
     useRef.setData({
       'join': FieldValue.arrayUnion([evRef])
     }, merge: true).then((val) {
-      Navigator.pop(context);
       setState(() {
-        Navigator.pop(context);
         _count = 1;
         forUser.clear();
       });
@@ -739,7 +731,9 @@ class _EventCustomerState extends State<EventCustomer> {
                                       highlightColor: Colors.red,
                                       onPressed: () {
                                         print('fuckkkkk');
-                                        _showDialog();
+                                        if (_formKey.currentState.validate()) {
+                                          _showDialog(snapshot.data['currentAmount'],snapshot.data['productName'],snapshot.data['image']);
+                                        }
                                       },
                                       elevation: 1.1,
                                       shape: RoundedRectangleBorder(

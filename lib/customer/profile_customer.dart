@@ -15,6 +15,7 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
   var proFile;
   var inStead = 'https://firebasestorage.googleapis.com/v0/b/login-ce9de.appspot.com/o/user%2Fimages.png?alt=media&token=bbc9397d-f425-4834-82f1-5e6855b4a171';
   var email;
+  var uid;
 
   @override
   void initState() {
@@ -24,6 +25,7 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
       setState(() {
         proFile = user.photoUrl;
         email = user.email;
+        uid = user.uid;
       });
     }).catchError((e){
       print(e);
@@ -109,7 +111,7 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
                           ListTile(
                             onTap: (){
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context)=>UpdateProfile())
+                                  MaterialPageRoute(builder: (context)=>UpdateProfile(uid))
                               );
                             },
                             leading: Icon(

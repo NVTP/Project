@@ -63,7 +63,7 @@ class _MainCustomerState extends State<MainCustomer> {
                 Icons.notifications,
                 color: Colors.blueGrey,
               ),
-              title: Text('Notifications', style: TextStyle(fontSize: 10),),
+              title: Text('Status', style: TextStyle(fontSize: 10),),
             ),
             BottomNavigationBarItem(
               activeIcon: Icon(
