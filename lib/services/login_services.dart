@@ -28,19 +28,19 @@ class Login {
           .then((doc) {
         if (doc.documents[0].exists) {
           if (doc.documents[0].data['role'] == 'user') {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context)=>MainCustomer()),
-                ModalRoute.withName('/'));
-//            Navigator.of(context).pushReplacement(
-//                MaterialPageRoute(builder: (context) => MainCustomer()));
+//            Navigator.pushAndRemoveUntil(
+//                context,
+//                MaterialPageRoute(builder: (context)=>MainCustomer()),
+//                ModalRoute.withName('/'));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => MainCustomer()));
           } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context)=>MainShop()),
-                ModalRoute.withName('/'));
-//            Navigator.of(context).pushReplacement(
-//                MaterialPageRoute(builder: (context) => MainShop()));
+//            Navigator.pushAndRemoveUntil(
+//                context,
+//                MaterialPageRoute(builder: (context)=>MainShop()),
+//                ModalRoute.withName('/'));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => MainShop()));
           }
         }
       });

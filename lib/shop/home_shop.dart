@@ -177,6 +177,9 @@ class _HomeShopState extends State<HomeShop> {
                                     width: 40,
                                   ),
                                   Container(
+                                    child: Center(
+                                      child: Text('Loading...'),
+                                    ),
                                     height: 100,
                                     width: 100,
                                     decoration: BoxDecoration(

@@ -459,6 +459,7 @@ class _EventCustomerState extends State<EventCustomer> {
     }).catchError((e) {
       print('asdc $e');
     });
+    Navigator.pop(context);
   }
 
   @override

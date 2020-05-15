@@ -102,6 +102,9 @@ class _CartShopState extends State<CartShop> {
                                         width: 40,
                                       ),
                                       Container(
+                                        child: Center(
+                                          child: Text('Loading...'),
+                                        ),
                                         height: 100,
                                         width: 100,
                                         decoration: BoxDecoration(

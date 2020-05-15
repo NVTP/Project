@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalproject/controllers/event_controller.dart';
 import 'package:finalproject/customer/controlPageCustomer/main_event.dart';
+import 'package:finalproject/customer/search_cus.dart';
 import 'package:finalproject/services/notifier/event_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../search.dart';
 
 class HomeCustomer extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
             onTap: (){
               Navigator.push(context,
                   MaterialPageRoute(
-                      builder: (context)=>Search()
+                      builder: (context)=>SearchCus()
                   )
               );
             },

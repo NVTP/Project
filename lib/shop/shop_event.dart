@@ -321,6 +321,7 @@ class _ShopEventState extends State<ShopEvent> {
                           RaisedButton(
                             onPressed: () {
                               showLog(productName,image,currentAmount,userId);
+//                              showLog(snapshot.data['productName'],snapshot.data['image'], snapshot.data['currentAmount'],snapshot.data['userId']);
                               print('when join');
                             },
                             elevation: 1.1,
