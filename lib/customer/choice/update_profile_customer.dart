@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:async';
+import 'package:finalproject/controllers/new_update_info.dart';
+import 'package:path/path.dart';
 
 class UpdateProfile extends StatefulWidget {
   String uid;
@@ -19,6 +22,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   TextEditingController _cusLName;
   TextEditingController _cusEmail;
   TextEditingController _cusPhone;
+  NewUpdateInfo updateInfo = new NewUpdateInfo();
   var inStead = 'https://firebasestorage.googleapis.com/v0/b/login-ce9de.appspot.com/o/user%2Fimages.png?alt=media&token=bbc9397d-f425-4834-82f1-5e6855b4a171';
   File imageProfile;
 
@@ -36,8 +40,24 @@ class _UpdateProfileState extends State<UpdateProfile> {
       imageProfile = image;
     });
   }
+  Future uploadImage(BuildContext context) async {
+    String fileName = basename(imageProfile.path);
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('CustomerProfile/${fileName.toString()}');
+    StorageUploadTask task = firebaseStorageRef.putFile(imageProfile);
+    StorageTaskSnapshot snapshotTask = await task.onComplete;
+    String downloadUrl = await snapshotTask.ref.getDownloadURL();
+    if (downloadUrl != null) {
+      updateInfo.updateProfilePic(downloadUrl.toString(), context).then((val) {
+        Navigator.pop(context);
+      }).catchError((e) {
+        print('upload error ${e}');
+      });
+    }
+  }
 
-  Widget showImage(String image){
+  Widget showImage(BuildContext context,String image){
     return Center(
       child: imageProfile == null
           ? Container(
@@ -254,6 +274,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               'email' : _cusEmail.text,
                               'proFile' : imageProfile,
                               'phone' : _cusPhone
+                            }).then((user){
+                              uploadImage(context);
                             }).catchError((e){
                               print('can\'t update');
                             });

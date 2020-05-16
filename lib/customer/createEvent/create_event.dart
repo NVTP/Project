@@ -111,30 +111,30 @@ class _CreateEventState extends State<CreateEvent> {
                           SizedBox(
                             height: 20,
                           ),
-                          TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.text,
-                            controller: _eventName,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.event,
-                                color: Colors.blueGrey[300],
-                              ),
-                              hintText: 'Event Name',
-                              hintStyle: TextStyle(color: Colors.blueGrey[300]),
-                              labelText: 'Event Name',
-                              labelStyle: TextStyle(color: Colors.blueGrey[300]),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Plese Fill Event Name';
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
+//                          TextFormField(
+//                            maxLines: 1,
+//                            keyboardType: TextInputType.text,
+//                            controller: _eventName,
+//                            decoration: InputDecoration(
+//                              prefixIcon: Icon(
+//                                Icons.event,
+//                                color: Colors.blueGrey[300],
+//                              ),
+//                              hintText: 'Event Name',
+//                              hintStyle: TextStyle(color: Colors.blueGrey[300]),
+//                              labelText: 'Event Name',
+//                              labelStyle: TextStyle(color: Colors.blueGrey[300]),
+//                              border: OutlineInputBorder(
+//                                  borderRadius: BorderRadius.circular(10)),
+//                            ),
+//                            validator: (value) {
+//                              if (value.isEmpty) {
+//                                return 'Plese Fill Event Name';
+//                              } else {
+//                                return null;
+//                              }
+//                            },
+//                          ),
                           SizedBox(
                             height: 20.0,
                           ),

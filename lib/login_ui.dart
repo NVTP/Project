@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalproject/customer/register_customer.dart';
+import 'package:finalproject/reset_pass.dart';
 import 'package:finalproject/services/login_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -255,50 +256,64 @@ class _LoginUIState extends State<LoginUI> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          RawMaterialButton(
-                            onPressed: () {},
-                            fillColor: Color(0xFF3B5998),
-                            shape: CircleBorder(),
-                            elevation: 3.0,
-                            child: Icon(
-                              FontAwesomeIcons.facebookF,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            RaisedButton(
+                              onPressed: () {
+                                // print('OK');
+                                Navigator.push(context,
+                                    MaterialPageRoute(
+                                        builder: (context) => RegisterCustomer())
+                                );
+                              },
+                              elevation: 3.1,
                               color: Colors.white,
-                              size: 20.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text('Register Now', style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontWeight: FontWeight.bold),),
                             ),
-                          ),
-                          RawMaterialButton(
-                            onPressed: () {},
-                            fillColor: Color(0xFFEA4335),
-                            shape: CircleBorder(),
-                            elevation: 0.1,
-                            child: Icon(
-                              FontAwesomeIcons.google,
-                              color: Colors.white,
-                              size: 20.0,
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: () {
-                              // print('OK');
-                              Navigator.push(context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterCustomer())
-                              );
-                            },
-                            elevation: 1.1,
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text('Register Now', style: TextStyle(
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.bold),),
-                          ),
-                        ],
-                      ),
+                            GestureDetector(
+                              onTap: () {
+                                //TODO
+                                //print('OK');
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ResetPassword()));
+                              },
+                              child: Text('For got password ?', style: TextStyle(
+                                  fontSize: 20.0, color: Colors.grey[300]),),
+                            )
+                          ],
+                        ),
+//                      child: Row(
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        children: <Widget>[
+//                          RawMaterialButton(
+//                            onPressed: () {},
+//                            fillColor: Color(0xFF3B5998),
+//                            shape: CircleBorder(),
+//                            elevation: 3.0,
+//                            child: Icon(
+//                              FontAwesomeIcons.facebookF,
+//                              color: Colors.white,
+//                              size: 20.0,
+//                            ),
+//                          ),
+//                          RawMaterialButton(
+//                            onPressed: () {},
+//                            fillColor: Color(0xFFEA4335),
+//                            shape: CircleBorder(),
+//                            elevation: 0.1,
+//                            child: Icon(
+//                              FontAwesomeIcons.google,
+//                              color: Colors.white,
+//                              size: 20.0,
+//                            ),
+//                          ),
+//                        ],
+//                      ),
                     ), //BUTTON
                     SizedBox(
                       height: 20.0,

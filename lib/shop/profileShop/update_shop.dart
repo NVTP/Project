@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finalproject/controllers/new_update_info.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:path/path.dart';
 
 class UpdateShop extends StatefulWidget {
   String uid;
@@ -20,6 +23,7 @@ class _UpdateShopState extends State<UpdateShop> {
   TextEditingController _shopName ;
   TextEditingController _shopAddress ;
   File imageProfile;
+  NewUpdateInfo updateInfo = new NewUpdateInfo();
   var inStead = 'https://firebasestorage.googleapis.com/v0/b/login-ce9de.appspot.com/o/user%2Fimages.png?alt=media&token=bbc9397d-f425-4834-82f1-5e6855b4a171';
 
   @override
@@ -31,6 +35,23 @@ class _UpdateShopState extends State<UpdateShop> {
     _shopPhone = TextEditingController();
     _shopName = TextEditingController();
     _shopAddress = TextEditingController();
+  }
+
+  Future uploadImage(BuildContext context) async {
+    String fileName = basename(imageProfile.path);
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('CustomerProfile/${fileName.toString()}');
+    StorageUploadTask task = firebaseStorageRef.putFile(imageProfile);
+    StorageTaskSnapshot snapshotTask = await task.onComplete;
+    String downloadUrl = await snapshotTask.ref.getDownloadURL();
+    if (downloadUrl != null) {
+      updateInfo.updateProfilePic(downloadUrl.toString(), context).then((val) {
+        Navigator.pop(context);
+      }).catchError((e) {
+        print('upload error ${e}');
+      });
+    }
   }
 
   Future getImageCamera() async{
@@ -48,7 +69,7 @@ class _UpdateShopState extends State<UpdateShop> {
     });
   }
 
-  Widget showImage(){
+  Widget showImage(BuildContext context){
     return Center(
       child: imageProfile == null
           ? Container(
@@ -250,6 +271,8 @@ class _UpdateShopState extends State<UpdateShop> {
                               'email' : _shopEmail.text,
                               'ShopAddress' : _shopAddress.text,
                               'ShopPhone' : _shopPhone
+                            }).then((user){
+                              uploadImage(context);
                             }).catchError((e){
                               print('can\'t update');
                             });

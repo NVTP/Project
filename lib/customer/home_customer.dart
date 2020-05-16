@@ -102,15 +102,14 @@ class _HomeCustomerState extends State<HomeCustomer> {
                               Container(
                                 height: 100,
                                 width: 100,
-                                child: Center(child: Text('Loading...')),
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.grey[300],width: 1),
                                     borderRadius: BorderRadius.circular(22),
-                                    color: Colors.black12
-//                                      image: DecorationImage(
-//                                          fit: BoxFit.cover,
-//                                          image: NetworkImage(reversedDocuments[index].data['image'].toString())
-//                                      ),
+                                    color: Colors.black12,
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(reversedDocuments[index].data['image'].toString())
+                                      ),
                                 ),
                               ),
                               SizedBox(

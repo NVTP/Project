@@ -127,16 +127,15 @@ class _CartCustomerState extends State<CartCustomer> {
                               padding: EdgeInsets.symmetric(horizontal: 22),
                               height: 250,
                               width: MediaQuery.of(context).size.width,
-                              child: Center(child: Text('Loading...'),),
                               decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Colors.grey[300], width: 2),
                                 borderRadius: BorderRadius.circular(22),
-//                            image: DecorationImage(
-//                              fit: BoxFit.cover,
-//                              alignment: Alignment.center,
-//                              image: NetworkImage(reversedDocuments[index].data['image'])
-//                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center,
+                              image: NetworkImage(reversedDocuments[index].data['image'])
+                            ),
                               ),
                             ),
                             SizedBox(

@@ -150,11 +150,11 @@ class _ShopEventState extends State<ShopEvent> {
             .document(widget.evID)
             .snapshots(),
         builder: (context, snapshot) {
-          var productName = snapshot.data['productName'];
-          var image = snapshot.data['image'];
-          var currentAmount = snapshot.data['currentAmount'];
-          var userId = snapshot.data['userCreateId'];
-          if (!snapshot.hasData) return Text('loading');
+//          var productName = snapshot.data['productName'];
+//          var image = snapshot.data['image'];
+//          var currentAmount = snapshot.data['currentAmount'];
+//          var userId = snapshot.data['userCreateId'];
+//          if (!snapshot.hasData) return Text('loading');
           return SingleChildScrollView(
             child: Center(
               child: Form(
@@ -320,8 +320,8 @@ class _ShopEventState extends State<ShopEvent> {
                           ),
                           RaisedButton(
                             onPressed: () {
-                              showLog(productName,image,currentAmount,userId);
-//                              showLog(snapshot.data['productName'],snapshot.data['image'], snapshot.data['currentAmount'],snapshot.data['userId']);
+//                              showLog(productName,image,currentAmount,userId);
+                              showLog(snapshot.data['productName'],snapshot.data['image'], snapshot.data['currentAmount'],snapshot.data['userId']);
                               print('when join');
                             },
                             elevation: 1.1,

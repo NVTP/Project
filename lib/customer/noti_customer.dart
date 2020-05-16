@@ -33,188 +33,192 @@ class _NotificationCustomerState extends State<NotificationCustomer> {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(
-            child: StreamBuilder(
-              stream: Firestore.instance
-                  .collection('users')
-                  .document(uid)
-                  .collection('userCreate')
-                  .orderBy('createAt', descending: false)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: Text('NULL'),
-                  );
-                } else {
-                  List<DocumentSnapshot> reversedDocuments =
-                  snapshot.data.documents.reversed.toList();
-                  return ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 8,
-                        child: Divider(
-                          height: 1,
-                          color: Colors.red,
-                        ),
-                      );
-                    },
-                    itemCount: reversedDocuments.length,
-                    itemBuilder: (context, index) {
-                      return SingleChildScrollView(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22, vertical: 12),
-                                child: InkWell(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Checkouts(
-                                            reversedDocuments[index]
-                                                .data['eventId'],
-                                            reversedDocuments[index]
-                                                .data['userAmount'],
-                                          ))),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  reversedDocuments[index]
-                                                      .data['image'])),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text('Product : ' +
+          Container(
+            child: Expanded(
+              child: StreamBuilder(
+                stream: Firestore.instance
+                    .collection('users')
+                    .document(uid)
+                    .collection('userCreate')
+                    .orderBy('createAt', descending: false)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Text('NULL'),
+                    );
+                  } else {
+                    List<DocumentSnapshot> reversedDocuments =
+                    snapshot.data.documents.reversed.toList();
+                    return ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 8,
+                          child: Divider(
+                            height: 1,
+                            color: Colors.red,
+                          ),
+                        );
+                      },
+                      itemCount: reversedDocuments.length,
+                      itemBuilder: (context, index) {
+                        return SingleChildScrollView(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22, vertical: 12),
+                                  child: InkWell(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Checkouts(
                                               reversedDocuments[index]
-                                                  .data['productName']),
-                                          Text('status : Waiting')
-                                        ],
-                                      ),
-                                    ],
+                                                  .data['eventId'],
+                                              reversedDocuments[index]
+                                                  .data['userAmount'],
+                                            ))),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 100,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                    reversedDocuments[index]
+                                                        .data['image'])),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Column(
+                                          children: <Widget>[
+                                            Text('Product : ' +
+                                                reversedDocuments[index]
+                                                    .data['productName']),
+                                            Text('status : Waiting')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                                child: Divider(
-                                  height: 1,
-                                  color: Colors.grey,
+                                SizedBox(
+                                  height: 8,
+                                  child: Divider(
+                                    height: 1,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ),
           ),
-          Expanded(
-            child: StreamBuilder(
-              stream: Firestore.instance
-                  .collection('users')
-                  .document(uid)
-                  .collection('userJoin')
-                  .orderBy('joinAt', descending: false)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: Text('NULL'),
-                  );
-                } else {
-                  List<DocumentSnapshot> reversedDocuments =
-                  snapshot.data.documents.reversed.toList();
-                  return ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 8,
-                        child: Divider(
-                          height: 1,
-                          color: Colors.red,
-                        ),
-                      );
-                    },
-                    itemCount: reversedDocuments.length,
-                    itemBuilder: (context, index) {
-                      return SingleChildScrollView(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22, vertical: 12),
-                                child: InkWell(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Checkouts(
-                                            reversedDocuments[index]
-                                                .data['eventId'],
-                                            reversedDocuments[index]
-                                                .data['userAmount'],
-                                          ))),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  reversedDocuments[index]
-                                                      .data['image'])),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text('Product : ' +
+          Container(
+            child: Expanded(
+              child: StreamBuilder(
+                stream: Firestore.instance
+                    .collection('users')
+                    .document(uid)
+                    .collection('userJoin')
+                    .orderBy('joinAt', descending: false)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Text('NULL'),
+                    );
+                  } else {
+                    List<DocumentSnapshot> reversedDocuments =
+                    snapshot.data.documents.reversed.toList();
+                    return ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 8,
+                          child: Divider(
+                            height: 1,
+                            color: Colors.red,
+                          ),
+                        );
+                      },
+                      itemCount: reversedDocuments.length,
+                      itemBuilder: (context, index) {
+                        return SingleChildScrollView(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22, vertical: 12),
+                                  child: InkWell(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Checkouts(
                                               reversedDocuments[index]
-                                                  .data['productName']),
-                                          Text('status : Waiting')
-                                        ],
-                                      ),
-                                    ],
+                                                  .data['eventId'],
+                                              reversedDocuments[index]
+                                                  .data['userAmount'],
+                                            ))),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 100,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                    reversedDocuments[index]
+                                                        .data['image'])),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Column(
+                                          children: <Widget>[
+                                            Text('Product : ' +
+                                                reversedDocuments[index]
+                                                    .data['productName']),
+                                            Text('status : Waiting')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                                child: Divider(
-                                  height: 1,
-                                  color: Colors.grey,
+                                SizedBox(
+                                  height: 8,
+                                  child: Divider(
+                                    height: 1,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ],

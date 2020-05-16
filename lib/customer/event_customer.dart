@@ -748,28 +748,28 @@ class _EventCustomerState extends State<EventCustomer> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 12.0,
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: RaisedButton(
-                                      color: Colors.blueGrey[200],
-                                      onPressed: () {},
-                                      elevation: 1.1,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: Text(
-                                        'Delete',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+//                                SizedBox(
+//                                  width: 12.0,
+//                                ),
+//                                Expanded(
+//                                  flex: 1,
+//                                  child: Container(
+//                                    width: MediaQuery.of(context).size.width,
+//                                    child: RaisedButton(
+//                                      color: Colors.blueGrey[200],
+//                                      onPressed: () {},
+//                                      elevation: 1.1,
+//                                      shape: RoundedRectangleBorder(
+//                                          borderRadius:
+//                                              BorderRadius.circular(20)),
+//                                      child: Text(
+//                                        'Delete',
+//                                        style: TextStyle(
+//                                            color: Colors.white, fontSize: 18),
+//                                      ),
+//                                    ),
+//                                  ),
+//                                ),
 //                        IconButton(
 //                          onPressed: () {},
 //                          icon: Icon(

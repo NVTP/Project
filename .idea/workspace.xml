@@ -2,14 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="356b5ddb-4c87-43b9-9681-0fd99b565a19" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/customer/search_cus.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/reset_pass.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/.filecache" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/.filecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/app.dill" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/app.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/kernel_snapshot.d" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/kernel_snapshot.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/kernel_snapshot.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/7279da8d5e75ca1b4f27a4587c2a8950/kernel_snapshot.stamp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/.packages" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/app/intermediates/flutter/debug/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/intermediates/flutter/debug/flutter_assets/kernel_blob.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/app/intermediates/flutter/debug/flutter_build.d" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/intermediates/flutter/debug/flutter_build.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/app/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/out/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/out/flutter_assets/kernel_blob.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/app/outputs/apk/app.apk" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/outputs/apk/app.apk" afterDir="false" />
@@ -17,13 +18,17 @@
       <change beforePath="$PROJECT_DIR$/build/app/outputs/apk/debug/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/outputs/apk/debug/app-debug.apk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/app/outputs/flutter-apk/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/build/app/outputs/flutter-apk/app-debug.apk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/cache.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/cache.dill" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/cart_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/cart_customer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/cart_customer_join.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/cart_customer_join.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/choice/update_profile_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/choice/update_profile_customer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/createEvent/create_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/createEvent/create_event.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/customer/event_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/event_customer.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/customer/home_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/home_customer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/search.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/search.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/login_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/login_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/customer/noti_customer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/customer/noti_customer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/login_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login_ui.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/shop/cart_shop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shop/cart_shop.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/shop/home_shop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shop/home_shop.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shop/profileShop/information_shop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shop/profileShop/information_shop.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/shop/profileShop/update_shop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shop/profileShop/update_shop.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/shop/shop_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shop/shop_event.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
